@@ -34,6 +34,8 @@ Then open:
 http://localhost:8000/dashboard/
 ```
 
+The dashboard includes sample results for quick review. After you run the triage command, it loads the generated `output/triage-results.json` file.
+
 On Windows, you can also run:
 
 ```powershell
