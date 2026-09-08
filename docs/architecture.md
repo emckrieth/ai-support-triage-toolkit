@@ -39,7 +39,7 @@ Each runbook is JSON so support teams can tune signals, thresholds, owners, and 
 
 ### dashboard/index.html
 
-A static dashboard that reads `output/triage-results.json` after the demo runs.
+A static dashboard that displays embedded sample results by default. After the demo runs, it reads `output/triage-results.json`.
 
 ## Design Choice
 
