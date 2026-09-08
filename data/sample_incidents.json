@@ -1,0 +1,95 @@
+[
+  {
+    "id": "INC-48291",
+    "title": "Remote users cannot connect to VPN",
+    "priority": "P1",
+    "service": "VPN",
+    "impact": "Remote support users cannot reach internal tools.",
+    "metrics": {
+      "vpn_handshake_p95_ms": 720,
+      "packet_loss_percent": 4.2,
+      "dns_lookup_ms": 1100,
+      "auth_failure_percent": 6.8
+    },
+    "summary": "Several users report that VPN connects, drops after authentication, and then internal DNS lookup fails.",
+    "evidence": [
+      {
+        "type": "ticket",
+        "source": "Ticket notes",
+        "text": "User elvin@example.com reports VPN handshake timeout after authentication. Similar reports from user-east-104 and user-east-233."
+      },
+      {
+        "type": "vpn_log",
+        "source": "VPN client log",
+        "text": "Handshake timeout to CHIVPNGW012. Session sess-a82fa113ff dropped after tunnel negotiation."
+      },
+      {
+        "type": "dns_test",
+        "source": "DNS test",
+        "text": "nslookup internal-app.local returns timeout after VPN tunnel drop from 192.168.10.24."
+      }
+    ]
+  },
+  {
+    "id": "INC-48304",
+    "title": "Endpoint disk pressure causing application failures",
+    "priority": "P2",
+    "service": "Endpoint",
+    "impact": "Finance workstation cannot complete monthly export.",
+    "metrics": {
+      "free_disk_percent": 4,
+      "temp_growth_gb_per_day": 18,
+      "app_write_failures_per_hour": 44,
+      "last_reboot_days": 38
+    },
+    "summary": "Application export fails when writing temporary files. Endpoint report shows low free disk.",
+    "evidence": [
+      {
+        "type": "ticket",
+        "source": "Ticket notes",
+        "text": "Finance user says export fails on FINLAPTOP88321 and retry does not help."
+      },
+      {
+        "type": "endpoint_health",
+        "source": "Endpoint health report",
+        "text": "Disk free space is 4 percent. Temp cache path growth is 18 GB per day."
+      },
+      {
+        "type": "app_log",
+        "source": "Application log",
+        "text": "Write failure when exporting report to C:\\Users\\user-fin\\AppData\\Local\\Temp\\export.tmp."
+      }
+    ]
+  },
+  {
+    "id": "INC-48319",
+    "title": "MFA reset request with stale privileged access",
+    "priority": "P3",
+    "service": "IAM",
+    "impact": "Admin user is blocked after phone replacement.",
+    "metrics": {
+      "privileged_review_age_days": 124,
+      "mfa_failures_per_hour": 5,
+      "approval_completeness_percent": 50,
+      "verification_age_hours": 42
+    },
+    "summary": "MFA reset request is valid, but privileged group access has stale review evidence.",
+    "evidence": [
+      {
+        "type": "ticket",
+        "source": "Ticket notes",
+        "text": "Admin user admin.user@example.com requests MFA reset after phone replacement."
+      },
+      {
+        "type": "iam_export",
+        "source": "IAM access export",
+        "text": "User user-admin-882 remains in Privileged-App-Admins. Last access review is 124 days old."
+      },
+      {
+        "type": "approval",
+        "source": "Approval notes",
+        "text": "Manager approval is missing. Identity verification note is older than 24 hours."
+      }
+    ]
+  }
+]
