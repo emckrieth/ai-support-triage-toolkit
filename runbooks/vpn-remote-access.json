@@ -1,0 +1,67 @@
+{
+  "id": "vpn-remote-access",
+  "title": "VPN Remote Access Troubleshooting",
+  "owner": "Network Operations",
+  "required_evidence": ["ticket", "vpn_log", "dns_test"],
+  "signals": [
+    {
+      "name": "VPN handshake timeout",
+      "keywords": ["handshake timeout", "tunnel negotiation", "vpn"],
+      "weight": 12,
+      "rationale": "Repeated VPN handshake timeouts point to remote access path or gateway instability."
+    },
+    {
+      "name": "DNS failure after tunnel drop",
+      "keywords": ["dns", "nslookup", "timeout", "tunnel drop"],
+      "weight": 9,
+      "rationale": "DNS failures after tunnel drop support VPN or internal name resolution triage."
+    },
+    {
+      "name": "Multiple users affected",
+      "keywords": ["several users", "similar reports", "multiple users"],
+      "weight": 7,
+      "rationale": "Multiple affected users make a shared service issue more likely than a single device issue."
+    }
+  ],
+  "baselines": [
+    {
+      "key": "vpn_handshake_p95_ms",
+      "name": "VPN handshake p95",
+      "threshold": 250,
+      "direction": "max",
+      "unit": " ms",
+      "rationale": "Remote access handshake latency above this range can indicate gateway, client, or network path issues."
+    },
+    {
+      "key": "packet_loss_percent",
+      "name": "Tunnel packet loss",
+      "threshold": 1,
+      "direction": "max",
+      "unit": "%",
+      "rationale": "Sustained packet loss above 1 percent can degrade VPN, voice, and remote desktop sessions."
+    },
+    {
+      "key": "dns_lookup_ms",
+      "name": "Internal DNS lookup",
+      "threshold": 300,
+      "direction": "max",
+      "unit": " ms",
+      "rationale": "Slow internal DNS lookups after VPN connection indicate name resolution or tunnel health problems."
+    },
+    {
+      "key": "auth_failure_percent",
+      "name": "Authentication failure rate",
+      "threshold": 2,
+      "direction": "max",
+      "unit": "%",
+      "rationale": "Repeated authentication failures should be correlated with VPN policy and identity logs."
+    }
+  ],
+  "recommended_actions": [
+    "Validate VPN gateway health.",
+    "Confirm tunnel IP assignment.",
+    "Test internal DNS after connection.",
+    "Check for recent VPN policy or routing changes."
+  ],
+  "escalation_template": "Escalate to Network Operations with affected users, handshake errors, DNS test results, and recent change window."
+}
