@@ -1,0 +1,11 @@
+__pycache__/
+.pytest_cache/
+.venv/
+venv/
+output/
+*.log
+*.tmp
+.env
+secrets.json
+tokens.txt
+.tmp-test/
