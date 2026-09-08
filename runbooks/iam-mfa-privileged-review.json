@@ -1,0 +1,67 @@
+{
+  "id": "iam-mfa-privileged-review",
+  "title": "MFA Reset With Privileged Access Review",
+  "owner": "Identity and Access Management",
+  "required_evidence": ["ticket", "iam_export", "approval"],
+  "signals": [
+    {
+      "name": "MFA device change request",
+      "keywords": ["mfa reset", "phone replacement", "device"],
+      "weight": 11,
+      "rationale": "MFA reset requests should validate identity before restoring access."
+    },
+    {
+      "name": "Privileged access present",
+      "keywords": ["privileged", "admins", "access review"],
+      "weight": 9,
+      "rationale": "Privileged access changes the risk level of a normal authentication recovery request."
+    },
+    {
+      "name": "Approval evidence incomplete",
+      "keywords": ["manager approval is missing", "verification note", "older than 24 hours"],
+      "weight": 7,
+      "rationale": "Missing or stale approval evidence should prevent fast closure."
+    }
+  ],
+  "baselines": [
+    {
+      "key": "privileged_review_age_days",
+      "name": "Privileged review age",
+      "threshold": 90,
+      "direction": "max",
+      "unit": " days",
+      "rationale": "Privileged access commonly needs review at least every 30 to 90 days."
+    },
+    {
+      "key": "mfa_failures_per_hour",
+      "name": "MFA failure rate",
+      "threshold": 3,
+      "direction": "max",
+      "unit": "/hr",
+      "rationale": "Multiple MFA failures in a short window should trigger verification checks."
+    },
+    {
+      "key": "approval_completeness_percent",
+      "name": "Approval completeness",
+      "threshold": 100,
+      "direction": "min",
+      "unit": "%",
+      "rationale": "Identity changes should have complete verification or approval evidence."
+    },
+    {
+      "key": "verification_age_hours",
+      "name": "Verification age",
+      "threshold": 24,
+      "direction": "max",
+      "unit": " hr",
+      "rationale": "Older verification evidence should be refreshed before making access changes."
+    }
+  ],
+  "recommended_actions": [
+    "Verify the requester identity.",
+    "Document manager approval or approved exception.",
+    "Reset MFA only after verification.",
+    "Route stale privileged access to the access owner."
+  ],
+  "escalation_template": "Send to IAM with MFA request details, verification status, privileged group review age, and missing approval evidence."
+}
