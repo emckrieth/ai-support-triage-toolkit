@@ -1,0 +1,67 @@
+{
+  "id": "endpoint-disk-pressure",
+  "title": "Endpoint Disk Pressure Remediation",
+  "owner": "Endpoint Operations",
+  "required_evidence": ["ticket", "endpoint_health", "app_log"],
+  "signals": [
+    {
+      "name": "Low free disk",
+      "keywords": ["disk free", "free space", "4 percent", "low free disk"],
+      "weight": 12,
+      "rationale": "Low free disk is a direct cause of write failures and application instability."
+    },
+    {
+      "name": "Application write failures",
+      "keywords": ["write failure", "export fails", "temporary files"],
+      "weight": 9,
+      "rationale": "Write failures align with disk pressure and should be validated before escalating as an application defect."
+    },
+    {
+      "name": "Recurring temp growth",
+      "keywords": ["temp cache", "temp", "growth"],
+      "weight": 7,
+      "rationale": "Recurring temporary file growth suggests a cleanup plus problem management path."
+    }
+  ],
+  "baselines": [
+    {
+      "key": "free_disk_percent",
+      "name": "Free disk space",
+      "threshold": 15,
+      "direction": "min",
+      "unit": "%",
+      "rationale": "Workstations below 15 percent free disk should be reviewed. Below 10 percent is commonly actionable."
+    },
+    {
+      "key": "temp_growth_gb_per_day",
+      "name": "Temp growth rate",
+      "threshold": 5,
+      "direction": "max",
+      "unit": " GB/day",
+      "rationale": "Fast recurring temp growth can signal a repeatable endpoint hygiene issue."
+    },
+    {
+      "key": "app_write_failures_per_hour",
+      "name": "App write failures",
+      "threshold": 5,
+      "direction": "max",
+      "unit": "/hr",
+      "rationale": "Sustained write failures above this range support endpoint remediation before app escalation."
+    },
+    {
+      "key": "last_reboot_days",
+      "name": "Last reboot age",
+      "threshold": 30,
+      "direction": "max",
+      "unit": " days",
+      "rationale": "Long uptime can add risk when the endpoint is already showing application failures."
+    }
+  ],
+  "recommended_actions": [
+    "Capture before state for free disk and application error.",
+    "Clean only approved cache and temp locations.",
+    "Validate the user workflow after cleanup.",
+    "Flag recurring growth for problem review."
+  ],
+  "escalation_template": "Route to Endpoint Operations with disk report, application write error, before and after values, and recurrence notes."
+}
