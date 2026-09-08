@@ -42,6 +42,26 @@ On Windows, you can also run:
 .\scripts\run_demo.ps1
 ```
 
+## Two-Minute Demo
+
+1. Run `.\scripts\run_demo.ps1`.
+2. Start the local web server with `python -m http.server 8000`.
+3. Open `http://localhost:8000/dashboard/`.
+4. Select each incident in the left panel and review the recommended runbook, baseline outliers, evidence coverage, and escalation notes.
+5. Open `output/support-summary.md` to see the support-ready summary generated from the same data.
+
+## Dashboard Preview
+
+The dashboard is designed for quick operational review. It shows:
+
+- incident priority and next owner
+- runbook confidence score
+- baseline metric comparisons
+- evidence sources used for the recommendation
+- sanitized ticket notes and escalation details
+
+This helps a support engineer explain why a runbook was selected instead of only showing a final recommendation.
+
 ## Example Scenarios
 
 The sample data includes three support scenarios:
@@ -63,6 +83,8 @@ Each runbook defines:
 - Escalation owner
 
 The tool does not pretend to replace an engineer. It organizes evidence so an engineer can make a faster and safer decision.
+
+For more detail, see `docs/decision-model.md`.
 
 ## Baseline Metrics
 
@@ -89,6 +111,7 @@ ai-support-triage-toolkit/
 │   └── sample_incidents.json
 ├── docs/
 │   ├── architecture.md
+│   ├── decision-model.md
 │   ├── metrics-baselines.md
 │   └── runbook-authoring.md
 ├── examples/
