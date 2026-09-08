@@ -1,0 +1,14 @@
+[project]
+name = "ai-support-triage-toolkit"
+version = "0.1.0"
+description = "AI-assisted support triage with sanitized evidence, baseline outlier detection, runbook matching, and dashboard reporting."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Elvin McKrieth" }]
+
+[project.scripts]
+support-triage = "app.triage:main"
+
+[tool.setuptools]
+packages = ["app"]
