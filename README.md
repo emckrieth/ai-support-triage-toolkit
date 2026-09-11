@@ -42,9 +42,9 @@ On Windows, you can also run:
 .\scripts\run_demo.ps1
 ```
 
-## Live Dashboard
+## Pages-Ready Dashboard
 
-View the published dashboard:
+The dashboard files are ready to publish from `docs/index.html` using GitHub Pages. After Pages is enabled with source `main` and folder `/docs`, the live URL will be:
 
 ```text
 https://emckrieth.github.io/ai-support-triage-toolkit/
