@@ -42,6 +42,14 @@ On Windows, you can also run:
 .\scripts\run_demo.ps1
 ```
 
+## Live Dashboard
+
+View the published dashboard:
+
+```text
+https://emckrieth.github.io/ai-support-triage-toolkit/
+```
+
 ## Two-Minute Demo
 
 1. Run `.\scripts\run_demo.ps1`.
@@ -61,6 +69,10 @@ The dashboard is designed for quick operational review. It shows:
 - sanitized ticket notes and escalation details
 
 This helps a support engineer explain why a runbook was selected instead of only showing a final recommendation.
+
+![Dashboard overview](docs/assets/dashboard-overview.png)
+
+![Runbook evidence](docs/assets/runbook-evidence.png)
 
 ## Example Scenarios
 
@@ -110,8 +122,12 @@ ai-support-triage-toolkit/
 ├── data/
 │   └── sample_incidents.json
 ├── docs/
+│   ├── assets/
+│   │   ├── dashboard-overview.png
+│   │   └── runbook-evidence.png
 │   ├── architecture.md
 │   ├── decision-model.md
+│   ├── index.html
 │   ├── metrics-baselines.md
 │   └── runbook-authoring.md
 ├── examples/
