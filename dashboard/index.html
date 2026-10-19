@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="data:,">
   <title>Support Triage Dashboard</title>
   <style>
     :root {
@@ -1049,6 +1050,8 @@
 
     async function loadResults() {
       try {
+        // Generated output only exists in a local checkout; the published site uses the embedded sample.
+        if (!location.pathname.includes("/dashboard/")) throw new Error("Published site uses sample results");
         const response = await fetch("../output/triage-results.json");
         if (!response.ok) throw new Error("No generated output found");
         results = await response.json();

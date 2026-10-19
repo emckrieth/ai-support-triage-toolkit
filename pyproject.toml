@@ -1,7 +1,7 @@
 [project]
 name = "ai-support-triage-toolkit"
 version = "0.1.0"
-description = "AI-assisted support triage with sanitized evidence, baseline outlier detection, runbook matching, and dashboard reporting."
+description = "AI-assisted support triage plus support operations metrics: sanitized evidence, baseline outlier detection, runbook matching, SLA tracking, systemic issue detection, QA review, and dashboards."
 readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "MIT" }

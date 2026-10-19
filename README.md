@@ -27,6 +27,7 @@ Support teams often receive messy ticket notes, screenshots, log snippets, endpo
 
 ```powershell
 python -m app.triage --input data/sample_incidents.json --runbooks runbooks --output output/triage-results.json --summary output/support-summary.md
+python -m app.support_ops
 python -m unittest discover -s tests
 python -m http.server 8000
 ```
@@ -34,10 +35,11 @@ python -m http.server 8000
 Then open:
 
 ```text
-http://localhost:8000/dashboard/
+http://localhost:8000/dashboard/                  incident triage
+http://localhost:8000/dashboard/support-ops.html  support ops metrics
 ```
 
-The dashboard includes sample results for quick review. After you run the triage command, it loads the generated `output/triage-results.json` file.
+The triage dashboard includes sample results for quick review. After you run the triage command, it loads the generated `output/triage-results.json` file. The support ops dashboard loads `output/support-ops-metrics.json` after `python -m app.support_ops` runs, and falls back to the committed example in `examples/` otherwise.
 
 On Windows, you can also run:
 
@@ -45,13 +47,14 @@ On Windows, you can also run:
 .\scripts\run_demo.ps1
 ```
 
-## Pages-Ready Dashboard
+## Live Dashboards
 
-The dashboard files are ready to publish from `docs/index.html` using GitHub Pages. After Pages is enabled with source `main` and folder `/docs`, the live URL will be:
+Both dashboards are published with GitHub Pages from the `/docs` folder on `main`:
 
-```text
-https://emckrieth.github.io/ai-support-triage-toolkit/
-```
+- Incident triage: https://emckrieth.github.io/ai-support-triage-toolkit/
+- Support ops metrics: https://emckrieth.github.io/ai-support-triage-toolkit/support-ops.html
+
+The published pages use the committed sample data. `docs/index.html` and `docs/support-ops.html` are copies of the files in `dashboard/`, and `docs/support-ops-metrics.json` is a copy of `examples/support-ops-metrics.json`. Copy them again after changing a dashboard or regenerating the example.
 
 ## Two-Minute Demo
 
@@ -60,6 +63,7 @@ https://emckrieth.github.io/ai-support-triage-toolkit/
 3. Open `http://localhost:8000/dashboard/`.
 4. Select each incident in the left panel and review the recommended runbook, baseline outliers, evidence coverage, and escalation notes.
 5. Open `output/support-summary.md` to see the support-ready summary generated from the same data.
+6. Open `http://localhost:8000/dashboard/support-ops.html` for the team lead view, and `output/weekly-support-review.md` for the weekly review write-up.
 
 ## Dashboard Preview
 
@@ -86,7 +90,9 @@ python -m app.support_ops
 python -m http.server 8000
 ```
 
-Then open `http://localhost:8000/dashboard/support-ops.html`. Once GitHub Pages is enabled, the same page is published at `https://emckrieth.github.io/ai-support-triage-toolkit/support-ops.html`.
+Then open `http://localhost:8000/dashboard/support-ops.html`, or view the [live version](https://emckrieth.github.io/ai-support-triage-toolkit/support-ops.html).
+
+![Support ops dashboard](docs/assets/support-ops-dashboard.png)
 
 From six weeks of fictional tickets (`data/support_tickets.csv`) and QA reviews (`data/qa_reviews.csv`) it produces:
 
@@ -161,7 +167,8 @@ ai-support-triage-toolkit/
 ├── docs/
 │   ├── assets/
 │   │   ├── dashboard-overview.png
-│   │   └── runbook-evidence.png
+│   │   ├── runbook-evidence.png
+│   │   └── support-ops-dashboard.png
 │   ├── architecture.md
 │   ├── decision-model.md
 │   ├── index.html
