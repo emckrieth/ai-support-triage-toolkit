@@ -1,0 +1,632 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Support Ops Metrics</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: light-dark(#f6f8fb, #0d1117);
+      --panel: light-dark(#ffffff, #121925);
+      --soft: light-dark(#eef4fb, #172132);
+      --text: light-dark(#172033, #eaf1fb);
+      --muted: light-dark(#5d6b7d, #9cadc2);
+      --border: light-dark(#d8e2ee, #26364d);
+      --grid: light-dark(#e8edf3, #1f2b3d);
+      --axis: light-dark(#c3ccd8, #33445c);
+      --series-1: light-dark(#2a78d6, #3987e5);
+      --series-2: light-dark(#eb6834, #d95926);
+      --good-text: light-dark(#006300, #0ca30c);
+      --bad-text: light-dark(#b42318, #ff7b72);
+      --status-good: #0ca30c;
+      --status-warning: #fab219;
+      --status-serious: #ec835a;
+      --status-critical: #d03b3b;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+    main { max-width: 1240px; margin: 0 auto; padding: 22px 16px 40px; }
+    h1, h2, h3 { margin: 0; font-weight: 600; }
+    h1 { font-size: 23px; }
+    h2 { font-size: 16px; margin-bottom: 4px; }
+    a { color: var(--series-1); }
+    .muted { color: var(--muted); }
+    .small { font-size: 12px; color: var(--muted); }
+    header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    .tiles {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .tile, .panel {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      min-width: 0;
+    }
+    .tile { padding: 14px; }
+    .tile .label { font-size: 12px; color: var(--muted); margin-bottom: 7px; }
+    .tile .value { font-size: 26px; font-weight: 600; }
+    .tile .delta { font-size: 12px; margin-top: 6px; color: var(--muted); }
+    .delta.good { color: var(--good-text); }
+    .delta.bad { color: var(--bad-text); }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+    .panel { padding: 16px; }
+    .panel-head { margin-bottom: 12px; }
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      font-size: 12px;
+      color: var(--muted);
+      margin: 8px 0 4px;
+    }
+    .key { display: inline-flex; align-items: center; gap: 6px; }
+    .key-line { width: 16px; height: 2px; border-radius: 1px; }
+    .chart { position: relative; }
+    .chart svg { display: block; width: 100%; height: auto; overflow: visible; }
+    .chart text { font-size: 11px; fill: var(--muted); font-variant-numeric: tabular-nums; }
+    .chart .direct { fill: var(--text); font-weight: 600; }
+    .tooltip {
+      position: absolute;
+      pointer-events: none;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      box-shadow: 0 6px 18px rgb(0 0 0 / 14%);
+      padding: 8px 10px;
+      font-size: 12px;
+      min-width: 150px;
+      display: none;
+      z-index: 2;
+    }
+    .tooltip .t-head { color: var(--muted); margin-bottom: 5px; }
+    .tooltip .t-row { display: flex; align-items: center; gap: 8px; margin-top: 3px; }
+    .tooltip .t-row strong { font-variant-numeric: tabular-nums; min-width: 46px; }
+    details { margin-top: 10px; font-size: 13px; }
+    summary { cursor: pointer; color: var(--muted); }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th, td { text-align: left; padding: 8px 6px; border-bottom: 1px solid var(--grid); vertical-align: top; }
+    th { color: var(--muted); font-weight: 500; font-size: 12px; }
+    td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .table-wrap { overflow-x: auto; }
+    .issues { display: grid; gap: 10px; }
+    .issue { border: 1px solid var(--border); padding: 12px; display: grid; gap: 6px; }
+    .issue-top { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      padding: 2px 8px;
+      border: 1px solid var(--border);
+      white-space: nowrap;
+    }
+    .badge .dot { width: 8px; height: 8px; border-radius: 50%; }
+    .bar-track { height: 8px; background: var(--soft); border-radius: 0 4px 4px 0; min-width: 60px; }
+    .bar-fill { height: 8px; background: var(--series-1); border-radius: 0 4px 4px 0; }
+    .qa-row { display: grid; grid-template-columns: 160px 1fr 44px; align-items: center; gap: 10px; margin: 8px 0; font-size: 13px; }
+    .qa-row .num { text-align: right; font-variant-numeric: tabular-nums; }
+    .stat-line { display: flex; flex-wrap: wrap; gap: 18px; margin: 4px 0 10px; font-size: 13px; }
+    .stat-line strong { font-size: 18px; display: block; }
+    .focus { margin: 0; padding-left: 18px; min-width: 220px; }
+    .focus li { margin: 2px 0; }
+    .wide { grid-column: 1 / -1; }
+    .notice { background: var(--soft); padding: 14px; }
+    @media (max-width: 1000px) {
+      .tiles { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 560px) {
+      .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .qa-row { grid-template-columns: 110px 1fr 40px; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <div>
+        <div class="small">AI Support Triage Toolkit</div>
+        <h1>Support Ops Metrics</h1>
+        <div class="small" id="period">Loading metrics...</div>
+      </div>
+      <div class="small"><a href="index.html">Incident triage dashboard</a></div>
+    </header>
+
+    <div id="notice" class="notice" hidden></div>
+
+    <section class="tiles" id="tiles" aria-label="Latest week headline metrics"></section>
+
+    <section class="grid">
+      <div class="panel">
+        <div class="panel-head">
+          <h2>SLA attainment by week</h2>
+          <div class="small" id="sla-sub">Share of tickets that met their target. Open tickets still inside their window are excluded.</div>
+          <div class="legend">
+            <span class="key"><span class="key-line" style="background: var(--series-1)"></span>First response</span>
+            <span class="key"><span class="key-line" style="background: var(--series-2)"></span>Resolution</span>
+            <span class="key"><span class="key-line" style="background: var(--axis)"></span>Goal</span>
+          </div>
+        </div>
+        <div class="chart" id="sla-chart"></div>
+        <details><summary>View as table</summary><div class="table-wrap" id="sla-table"></div></details>
+      </div>
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Tickets created by week</h2>
+          <div class="small">Volume trend for staffing and on-call planning.</div>
+        </div>
+        <div class="chart" id="volume-chart"></div>
+        <details><summary>View as table</summary><div class="table-wrap" id="volume-table"></div></details>
+      </div>
+    </section>
+
+    <section class="grid">
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Systemic issues</h2>
+          <div class="small">Patterns that point to a product or process problem, not a one-off ticket.</div>
+        </div>
+        <div class="issues" id="issues"></div>
+      </div>
+      <div class="panel">
+        <div class="panel-head">
+          <h2>SLA by priority</h2>
+          <div class="small">Whole period. P1 and P2 misses are the ones enterprise customers remember.</div>
+        </div>
+        <div class="table-wrap" id="priority-table"></div>
+      </div>
+    </section>
+
+    <section class="grid">
+      <div class="panel wide">
+        <div class="panel-head">
+          <h2>Ticket categories</h2>
+          <div class="small">Where the volume and escalations come from. "Last week" is compared with the average of the weeks before it.</div>
+        </div>
+        <div class="table-wrap" id="category-table"></div>
+      </div>
+    </section>
+
+    <section class="grid">
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Quality review</h2>
+          <div class="small">Average rubric score per dimension, 1 to 4.</div>
+        </div>
+        <div class="stat-line" id="qa-stats"></div>
+        <div id="qa-bars"></div>
+        <div id="qa-fails"></div>
+      </div>
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Coaching view</h2>
+          <div class="small">For 1:1s and development plans, not stack ranking.</div>
+        </div>
+        <div class="table-wrap" id="engineer-table"></div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const SOURCES = ["../output/support-ops-metrics.json", "../examples/support-ops-metrics.json", "support-ops-metrics.json"];
+    const SVG_NS = "http://www.w3.org/2000/svg";
+
+    function el(tag, attrs = {}, text) {
+      const node = document.createElement(tag);
+      for (const [key, value] of Object.entries(attrs)) node.setAttribute(key, value);
+      if (text !== undefined) node.textContent = text;
+      return node;
+    }
+
+    function svgEl(tag, attrs = {}, text) {
+      const node = document.createElementNS(SVG_NS, tag);
+      for (const [key, value] of Object.entries(attrs)) node.setAttribute(key, value);
+      if (text !== undefined) node.textContent = text;
+      return node;
+    }
+
+    function fmt(value, suffix = "") {
+      if (value === null || value === undefined) return "n/a";
+      return `${Number.isInteger(value) ? value : value.toFixed(1)}${suffix}`;
+    }
+
+    function label(key) {
+      return key
+        .replaceAll("_", " ")
+        .replace(/\b(api|sdk|sla|kb)\b/g, (word) => word.toUpperCase())
+        .replace(/^\w/, (c) => c.toUpperCase());
+    }
+
+    function shortWeek(week) {
+      const date = new Date(`${week}T00:00:00Z`);
+      return date.toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "UTC" });
+    }
+
+    async function loadReport() {
+      for (const source of SOURCES) {
+        try {
+          const response = await fetch(source, { cache: "no-store" });
+          if (response.ok) return { report: await response.json(), source };
+        } catch (error) {
+          // try the next location
+        }
+      }
+      return null;
+    }
+
+    function renderTiles(report) {
+      const latest = report.latest_week;
+      const previous = report.previous_week || {};
+      const goal = report.attainment_goal_percent;
+      const tiles = [
+        { label: "Tickets last week", key: "tickets", suffix: "", higherIsGood: null },
+        { label: "First response SLA", key: "first_response_sla_percent", suffix: "%", higherIsGood: true, goal },
+        { label: "Resolution SLA", key: "resolution_sla_percent", suffix: "%", higherIsGood: true, goal },
+        { label: "Escalation rate", key: "escalation_rate_percent", suffix: "%", higherIsGood: false },
+        { label: "CSAT", key: "csat_average", suffix: "", higherIsGood: true },
+        { label: "Open tickets", value: report.overall.open_tickets, note: `as of ${report.as_of.slice(0, 10)}` },
+      ];
+      const container = document.getElementById("tiles");
+      container.replaceChildren();
+      for (const tile of tiles) {
+        const card = el("div", { class: "tile" });
+        card.append(el("div", { class: "label" }, tile.label));
+        const value = tile.key ? latest[tile.key] : tile.value;
+        card.append(el("div", { class: "value" }, fmt(value, tile.suffix || "")));
+        let deltaText = tile.note || "";
+        let tone = "";
+        if (tile.key && previous[tile.key] !== undefined && value !== null && previous[tile.key] !== null) {
+          const change = Math.round((value - previous[tile.key]) * 10) / 10;
+          const unit = tile.suffix === "%" ? " pts" : "";
+          const arrow = change > 0 ? "▲" : change < 0 ? "▼" : "■";
+          deltaText = `${arrow} ${change > 0 ? "+" : ""}${change}${unit} vs prior week`;
+          if (tile.higherIsGood !== null && change !== 0) tone = (change > 0) === tile.higherIsGood ? "good" : "bad";
+          if (tile.goal) deltaText += ` · goal ${tile.goal}%`;
+        }
+        card.append(el("div", { class: `delta ${tone}` }, deltaText));
+        container.append(card);
+      }
+    }
+
+    function chartFrame(container, height) {
+      const width = 560;
+      const margin = { top: 16, right: 92, bottom: 28, left: 40 };
+      const svg = svgEl("svg", { viewBox: `0 0 ${width} ${height}`, role: "img" });
+      container.replaceChildren(svg);
+      const tooltip = el("div", { class: "tooltip", role: "status" });
+      container.append(tooltip);
+      return { svg, tooltip, width, height, margin, innerW: width - margin.left - margin.right, innerH: height - margin.top - margin.bottom };
+    }
+
+    function showTooltip(frame, container, x, y, head, rows) {
+      const { tooltip } = frame;
+      tooltip.replaceChildren(el("div", { class: "t-head" }, head));
+      for (const row of rows) {
+        const line = el("div", { class: "t-row" });
+        if (row.color) {
+          const key = el("span", { class: "key-line" });
+          key.style.background = row.color;
+          line.append(key);
+        }
+        line.append(el("strong", {}, row.value), el("span", { class: "muted" }, row.label));
+        tooltip.append(line);
+      }
+      tooltip.style.display = "block";
+      const box = container.getBoundingClientRect();
+      const scale = box.width / frame.width;
+      const left = Math.min(x * scale + 12, box.width - tooltip.offsetWidth - 4);
+      tooltip.style.left = `${Math.max(0, left)}px`;
+      tooltip.style.top = `${Math.max(0, y * scale - tooltip.offsetHeight - 8)}px`;
+    }
+
+    function renderSlaChart(report) {
+      const container = document.getElementById("sla-chart");
+      const frame = chartFrame(container, 260);
+      const { svg, margin, innerW, innerH } = frame;
+      const weeks = report.weekly;
+      const goal = report.attainment_goal_percent;
+      const series = [
+        { key: "first_response_sla_percent", name: "First response", color: "var(--series-1)" },
+        { key: "resolution_sla_percent", name: "Resolution", color: "var(--series-2)" },
+      ];
+      const values = weeks.flatMap((week) => series.map((s) => week[s.key])).filter((v) => v !== null);
+      const yMin = Math.max(0, Math.floor((Math.min(...values, goal) - 5) / 10) * 10);
+      const yMax = 100;
+      const x = (i) => margin.left + (weeks.length === 1 ? innerW / 2 : (i / (weeks.length - 1)) * innerW);
+      const y = (v) => margin.top + innerH - ((v - yMin) / (yMax - yMin)) * innerH;
+      svg.setAttribute("aria-label", "Line chart of weekly first response and resolution SLA attainment");
+
+      for (let tick = yMin; tick <= yMax; tick += 10) {
+        svg.append(svgEl("line", { x1: margin.left, x2: margin.left + innerW, y1: y(tick), y2: y(tick), stroke: "var(--grid)", "stroke-width": 1 }));
+        svg.append(svgEl("text", { x: margin.left - 8, y: y(tick) + 4, "text-anchor": "end" }, `${tick}%`));
+      }
+      svg.append(svgEl("line", { x1: margin.left, x2: margin.left + innerW, y1: y(goal), y2: y(goal), stroke: "var(--axis)", "stroke-width": 2 }));
+      svg.append(svgEl("text", { x: margin.left + innerW + 8, y: y(goal) + 4 }, `Goal ${goal}%`));
+      weeks.forEach((week, i) => svg.append(svgEl("text", { x: x(i), y: margin.top + innerH + 18, "text-anchor": "middle" }, shortWeek(week.week))));
+
+      const endLabels = [];
+      for (const s of series) {
+        const points = weeks.map((week, i) => [x(i), week[s.key]]).filter(([, v]) => v !== null);
+        const d = points.map(([px, v], i) => `${i ? "L" : "M"}${px},${y(v)}`).join(" ");
+        svg.append(svgEl("path", { d, fill: "none", stroke: s.color, "stroke-width": 2, "stroke-linejoin": "round", "stroke-linecap": "round" }));
+        const [lx, lv] = points[points.length - 1];
+        svg.append(svgEl("circle", { cx: lx, cy: y(lv), r: 4, fill: s.color, stroke: "var(--panel)", "stroke-width": 2 }));
+        endLabels.push({ y: y(lv), text: `${fmt(lv, "%")} ${s.name}` });
+      }
+      if (Math.abs(endLabels[0].y - endLabels[1].y) >= 14) {
+        for (const item of endLabels) svg.append(svgEl("text", { class: "direct", x: margin.left + innerW + 8, y: item.y + 4 }, item.text.split(" ")[0]));
+      }
+
+      const crosshair = svgEl("line", { y1: margin.top, y2: margin.top + innerH, stroke: "var(--axis)", "stroke-width": 1, visibility: "hidden" });
+      svg.append(crosshair);
+      const hit = svgEl("rect", { x: margin.left - 10, y: margin.top, width: innerW + 20, height: innerH, fill: "transparent", tabindex: 0 });
+      svg.append(hit);
+      let focusIndex = weeks.length - 1;
+      const show = (i) => {
+        focusIndex = i;
+        crosshair.setAttribute("x1", x(i));
+        crosshair.setAttribute("x2", x(i));
+        crosshair.setAttribute("visibility", "visible");
+        const week = weeks[i];
+        showTooltip(frame, container, x(i), margin.top + 10, `Week of ${shortWeek(week.week)} · ${week.tickets} tickets`, [
+          ...series.map((s) => ({ color: s.color, value: fmt(week[s.key], "%"), label: s.name })),
+          { value: `${goal}%`, label: "Goal" },
+        ]);
+      };
+      const hide = () => { crosshair.setAttribute("visibility", "hidden"); frame.tooltip.style.display = "none"; };
+      hit.addEventListener("pointermove", (event) => {
+        const box = svg.getBoundingClientRect();
+        const px = ((event.clientX - box.left) / box.width) * frame.width;
+        const i = Math.round(((px - margin.left) / innerW) * (weeks.length - 1));
+        show(Math.max(0, Math.min(weeks.length - 1, i)));
+      });
+      hit.addEventListener("pointerleave", hide);
+      hit.addEventListener("focus", () => show(focusIndex));
+      hit.addEventListener("blur", hide);
+      hit.addEventListener("keydown", (event) => {
+        if (event.key === "ArrowLeft") show(Math.max(0, focusIndex - 1));
+        if (event.key === "ArrowRight") show(Math.min(weeks.length - 1, focusIndex + 1));
+      });
+
+      document.getElementById("sla-table").replaceChildren(buildTable(
+        ["Week", "Tickets", "First response SLA", "Resolution SLA"],
+        weeks.map((w) => [w.week, w.tickets, fmt(w.first_response_sla_percent, "%"), fmt(w.resolution_sla_percent, "%")]),
+        [false, true, true, true],
+      ));
+    }
+
+    function renderVolumeChart(report) {
+      const container = document.getElementById("volume-chart");
+      const frame = chartFrame(container, 260);
+      const { svg, margin, innerW, innerH } = frame;
+      const weeks = report.weekly;
+      const maxValue = Math.max(...weeks.map((w) => w.tickets));
+      const yMax = Math.ceil(maxValue / 10) * 10 || 10;
+      const band = innerW / weeks.length;
+      const barW = Math.min(24, band * 0.6);
+      const y = (v) => margin.top + innerH - (v / yMax) * innerH;
+      svg.setAttribute("aria-label", "Column chart of tickets created per week");
+
+      for (let tick = 0; tick <= yMax; tick += yMax / 4) {
+        svg.append(svgEl("line", { x1: margin.left, x2: margin.left + innerW, y1: y(tick), y2: y(tick), stroke: tick === 0 ? "var(--axis)" : "var(--grid)", "stroke-width": 1 }));
+        svg.append(svgEl("text", { x: margin.left - 8, y: y(tick) + 4, "text-anchor": "end" }, Math.round(tick)));
+      }
+      const peak = weeks.reduce((best, w, i) => (w.tickets > weeks[best].tickets ? i : best), 0);
+      weeks.forEach((week, i) => {
+        const cx = margin.left + band * i + band / 2;
+        const top = y(week.tickets);
+        const h = margin.top + innerH - top;
+        const r = Math.min(4, h);
+        const path = `M${cx - barW / 2},${top + h} V${top + r} Q${cx - barW / 2},${top} ${cx - barW / 2 + r},${top} H${cx + barW / 2 - r} Q${cx + barW / 2},${top} ${cx + barW / 2},${top + r} V${top + h} Z`;
+        const bar = svgEl("path", { d: path, fill: "var(--series-1)" });
+        svg.append(bar);
+        svg.append(svgEl("text", { x: cx, y: margin.top + innerH + 18, "text-anchor": "middle" }, shortWeek(week.week)));
+        if (i === peak || i === weeks.length - 1) {
+          svg.append(svgEl("text", { class: "direct", x: cx, y: top - 6, "text-anchor": "middle" }, week.tickets));
+        }
+        const hit = svgEl("rect", { x: cx - band / 2, y: margin.top, width: band, height: innerH, fill: "transparent", tabindex: 0 });
+        const show = () => {
+          bar.setAttribute("opacity", "0.8");
+          showTooltip(frame, container, cx, top, `Week of ${shortWeek(week.week)}`, [
+            { color: "var(--series-1)", value: String(week.tickets), label: "Tickets created" },
+            { value: fmt(week.escalation_rate_percent, "%"), label: "Escalated" },
+          ]);
+        };
+        const hide = () => { bar.removeAttribute("opacity"); frame.tooltip.style.display = "none"; };
+        hit.addEventListener("pointerenter", show);
+        hit.addEventListener("pointerleave", hide);
+        hit.addEventListener("focus", show);
+        hit.addEventListener("blur", hide);
+        svg.append(hit);
+      });
+
+      document.getElementById("volume-table").replaceChildren(buildTable(
+        ["Week", "Tickets", "Escalation rate", "Median first response"],
+        weeks.map((w) => [w.week, w.tickets, fmt(w.escalation_rate_percent, "%"), fmt(w.median_first_response_minutes, " min")]),
+        [false, true, true, true],
+      ));
+    }
+
+    function buildTable(headers, rows, numeric = []) {
+      const table = el("table");
+      const head = el("tr");
+      headers.forEach((h, i) => head.append(el("th", numeric[i] ? { class: "num" } : {}, h)));
+      table.append(el("thead"));
+      table.tHead.append(head);
+      const body = el("tbody");
+      for (const row of rows) {
+        const tr = el("tr");
+        row.forEach((cell, i) => {
+          const td = el("td", numeric[i] ? { class: "num" } : {});
+          if (cell instanceof Node) td.append(cell); else td.textContent = cell;
+          tr.append(td);
+        });
+        body.append(tr);
+      }
+      table.append(body);
+      return table;
+    }
+
+    const STATUS = {
+      critical: { color: "var(--status-critical)", icon: "■", text: "Critical" },
+      serious: { color: "var(--status-serious)", icon: "▲", text: "Serious" },
+      warning: { color: "var(--status-warning)", icon: "●", text: "Warning" },
+      good: { color: "var(--status-good)", icon: "✓", text: "On target" },
+    };
+
+    function badge(status) {
+      const meta = STATUS[status];
+      const node = el("span", { class: "badge" });
+      const dot = el("span", { class: "dot", "aria-hidden": "true" });
+      dot.style.background = meta.color;
+      node.append(dot, document.createTextNode(`${meta.icon} ${meta.text}`));
+      return node;
+    }
+
+    function renderIssues(report) {
+      const container = document.getElementById("issues");
+      container.replaceChildren();
+      if (!report.systemic_issues.length) {
+        container.append(el("div", { class: "muted" }, "No category crossed the systemic issue thresholds."));
+        return;
+      }
+      for (const issue of report.systemic_issues) {
+        const card = el("div", { class: "issue" });
+        const top = el("div", { class: "issue-top" });
+        top.append(badge(issue.severity), el("strong", {}, label(issue.category)), el("span", { class: "muted" }, issue.signal));
+        card.append(top, el("div", {}, issue.evidence), el("div", { class: "small" }, `Next step: ${issue.action}`));
+        container.append(card);
+      }
+    }
+
+    function renderPriorities(report) {
+      const goal = report.attainment_goal_percent;
+      const status = (value) => badge(value === null ? "warning" : value >= goal ? "good" : value >= goal - 10 ? "serious" : "critical");
+      document.getElementById("priority-table").replaceChildren(buildTable(
+        ["Priority", "Targets", "Tickets", "First response", "Resolution", "Status"],
+        report.priorities.map((p) => [
+          p.priority,
+          `${p.first_response_target_minutes} min / ${p.resolution_target_hours} h`,
+          p.tickets,
+          fmt(p.first_response_sla_percent, "%"),
+          fmt(p.resolution_sla_percent, "%"),
+          status(Math.min(p.first_response_sla_percent ?? 100, p.resolution_sla_percent ?? 100)),
+        ]),
+        [false, false, true, true, true, false],
+      ));
+    }
+
+    function renderCategories(report) {
+      const maxTickets = Math.max(...report.categories.map((c) => c.tickets));
+      document.getElementById("category-table").replaceChildren(buildTable(
+        ["Category", "Tickets", "", "Last week", "Prior avg", "Escalated", "Reopened", "Median resolution", "First response SLA"],
+        report.categories.map((c) => {
+          const track = el("div", { class: "bar-track", "aria-hidden": "true" });
+          const fill = el("div", { class: "bar-fill" });
+          fill.style.width = `${(c.tickets / maxTickets) * 100}%`;
+          track.append(fill);
+          return [
+            label(c.category),
+            c.tickets,
+            track,
+            c.latest_week_tickets,
+            fmt(c.prior_weekly_average),
+            fmt(c.escalation_rate_percent, "%"),
+            fmt(c.reopen_rate_percent, "%"),
+            fmt(c.median_resolution_hours, " h"),
+            fmt(c.first_response_sla_percent, "%"),
+          ];
+        }),
+        [false, true, false, true, true, true, true, true, true],
+      ));
+    }
+
+    function renderQa(report) {
+      const qa = report.qa;
+      const stats = document.getElementById("qa-stats");
+      stats.replaceChildren();
+      for (const [name, value] of [["Reviews", qa.reviews], ["Average score", fmt(qa.average_score)], ["Pass rate", fmt(qa.pass_rate_percent, "%")]]) {
+        const item = el("div");
+        item.append(el("strong", {}, String(value)), el("span", { class: "small" }, name));
+        stats.append(item);
+      }
+      const bars = document.getElementById("qa-bars");
+      bars.replaceChildren();
+      const weakest = qa.dimensions.reduce((a, b) => (b.average < a.average ? b : a));
+      for (const dim of qa.dimensions) {
+        const row = el("div", { class: "qa-row" });
+        const name = el("span", {}, dim.name);
+        if (dim === weakest) name.append(el("span", { class: "small" }, " · lowest"));
+        const track = el("div", { class: "bar-track", title: `${dim.name}: ${dim.average} of 4` });
+        const fill = el("div", { class: "bar-fill" });
+        fill.style.width = `${(dim.average / 4) * 100}%`;
+        track.append(fill);
+        row.append(name, track, el("span", { class: "num" }, dim.average.toFixed(2)));
+        bars.append(row);
+      }
+      const fails = document.getElementById("qa-fails");
+      fails.replaceChildren();
+      for (const review of qa.auto_fails) {
+        const line = el("div", { class: "issue-top", style: "margin-top: 12px" });
+        line.append(badge("critical"), el("span", {}, `${review.ticket_id} auto-fail: ${review.auto_fail_reason}`));
+        fails.append(line);
+      }
+    }
+
+    function renderEngineers(report) {
+      document.getElementById("engineer-table").replaceChildren(buildTable(
+        ["Engineer", "Tickets", "First resp. SLA", "QA", "Coaching focus"],
+        report.engineers.map((e) => {
+          const list = el("ul", { class: "focus" });
+          for (const item of e.coaching_focus) list.append(el("li", {}, item));
+          return [e.engineer, e.tickets, fmt(e.first_response_sla_percent, "%"), fmt(e.qa_average), list];
+        }),
+        [false, true, true, true, false],
+      ));
+    }
+
+    function render(report) {
+      document.getElementById("period").textContent =
+        `${report.period.weeks} weeks from ${report.period.start} · latest week ${report.latest_week.week} · goal ${report.attainment_goal_percent}% SLA attainment`;
+      renderTiles(report);
+      renderSlaChart(report);
+      renderVolumeChart(report);
+      renderIssues(report);
+      renderPriorities(report);
+      renderCategories(report);
+      renderQa(report);
+      renderEngineers(report);
+    }
+
+    loadReport().then((result) => {
+      if (!result) {
+        const notice = document.getElementById("notice");
+        notice.hidden = false;
+        notice.textContent = "No metrics file found. Run: python -m app.support_ops, then serve the repo with python -m http.server 8000 and open /dashboard/support-ops.html.";
+        document.getElementById("period").textContent = "";
+        return;
+      }
+      render(result.report);
+    });
+  </script>
+</body>
+</html>

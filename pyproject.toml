@@ -9,6 +9,7 @@ authors = [{ name = "Elvin McKrieth" }]
 
 [project.scripts]
 support-triage = "app.triage:main"
+support-ops = "app.support_ops:main"
 
 [tool.setuptools]
 packages = ["app"]
