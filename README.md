@@ -2,6 +2,8 @@
 
 AI Support Triage Toolkit is a local-first support engineering project that turns tickets, logs, and endpoint or identity evidence into sanitized summaries, baseline outlier checks, runbook recommendations, and an interactive dashboard.
 
+It also includes a support operations view for team leads: SLA attainment, weekly trends, systemic issue detection, a ticket quality review rubric, and a coaching view, all generated from ticket data.
+
 The goal is to show practical enterprise support skills:
 
 - Evidence-based incident triage
@@ -9,6 +11,7 @@ The goal is to show practical enterprise support skills:
 - Runbook recommendation logic
 - Sanitization before sharing logs or using AI workflows
 - Clear escalation notes for support, infrastructure, endpoint, and IAM teams
+- Support team metrics, SLA tracking, and quality review that drive process improvements
 
 ## What This Solves
 
@@ -74,6 +77,34 @@ This helps a support engineer explain why a runbook was selected instead of only
 
 ![Runbook evidence](docs/assets/runbook-evidence.png)
 
+## Support Ops Metrics (Team Lead View)
+
+The triage engine works one incident at a time. The support ops module looks at the whole queue, the way a support lead runs a weekly review.
+
+```powershell
+python -m app.support_ops
+python -m http.server 8000
+```
+
+Then open `http://localhost:8000/dashboard/support-ops.html`. Once GitHub Pages is enabled, the same page is published at `https://emckrieth.github.io/ai-support-triage-toolkit/support-ops.html`.
+
+From six weeks of fictional tickets (`data/support_tickets.csv`) and QA reviews (`data/qa_reviews.csv`) it produces:
+
+- **SLA attainment** by week and priority, using the targets in `data/sla_policy.json`. Open tickets still inside their window count as pending, not missed.
+- **Volume and escalation trends** by week and category.
+- **Systemic issues**: volume spikes, high escalation rates, and high reopen rates that should go to Engineering or Product, each with a next step.
+- **Quality review scores** from a weighted rubric (`data/qa_rubric.json`) with auto-fail rules for things like pasting a customer API key.
+- **Coaching focus per engineer** for 1:1s, built from QA weak spots and SLA results.
+- **A weekly review write-up** in Markdown, ready to share with Engineering, Product, and Customer Success. See `examples/weekly-support-review.md`.
+
+The sample data has a story to find: a webhook delivery spike after a fictional release, risk score questions that escalate too often, and an on-call gap week where P1 and P2 response times slipped.
+
+Supporting docs:
+
+- `docs/support-ops-metrics.md` - metric definitions and systemic issue rules
+- `docs/severity-and-on-call.md` - priority and severity levels, on-call duties, handoffs, escalation paths
+- `docs/qa-review-framework.md` - rubric, auto-fail rules, calibration, and how results are used
+
 ## Example Scenarios
 
 The sample data includes three support scenarios:
@@ -116,11 +147,17 @@ Examples:
 ai-support-triage-toolkit/
 ├── app/
 │   ├── __init__.py
+│   ├── support_ops.py
 │   └── triage.py
 ├── dashboard/
-│   └── index.html
+│   ├── index.html
+│   └── support-ops.html
 ├── data/
-│   └── sample_incidents.json
+│   ├── qa_reviews.csv
+│   ├── qa_rubric.json
+│   ├── sample_incidents.json
+│   ├── sla_policy.json
+│   └── support_tickets.csv
 ├── docs/
 │   ├── assets/
 │   │   ├── dashboard-overview.png
@@ -129,16 +166,25 @@ ai-support-triage-toolkit/
 │   ├── decision-model.md
 │   ├── index.html
 │   ├── metrics-baselines.md
-│   └── runbook-authoring.md
+│   ├── qa-review-framework.md
+│   ├── runbook-authoring.md
+│   ├── severity-and-on-call.md
+│   ├── support-ops-metrics.json
+│   ├── support-ops-metrics.md
+│   └── support-ops.html
 ├── examples/
-│   └── sample-output.md
+│   ├── sample-output.md
+│   ├── support-ops-metrics.json
+│   └── weekly-support-review.md
 ├── runbooks/
 │   ├── endpoint-disk-pressure.json
 │   ├── iam-mfa-privileged-review.json
 │   └── vpn-remote-access.json
 ├── scripts/
+│   ├── generate_support_data.py
 │   └── run_demo.ps1
 ├── tests/
+│   ├── test_support_ops.py
 │   └── test_triage.py
 ├── .gitignore
 ├── LICENSE
@@ -155,6 +201,8 @@ This repo demonstrates skills that map to systems, support, and IAM engineering 
 - Protecting sensitive data before sharing
 - Creating clear escalation notes
 - Building useful automation around real support workflows
+- Running a support team on data: SLAs, trends, systemic issues, and quality review
+- Turning ticket patterns into specific asks for Engineering and Product
 
 ## Safety Note
 

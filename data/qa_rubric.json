@@ -1,0 +1,46 @@
+{
+  "scale": {"min": 1, "max": 4},
+  "pass_percent": 80,
+  "dimensions": [
+    {
+      "key": "technical_accuracy",
+      "name": "Technical accuracy",
+      "weight": 0.30,
+      "description": "Guidance is correct for the customer's API version, environment, and configuration.",
+      "coaching": "Pair on API debugging: reproduce with the customer's request, compare against docs, confirm before replying."
+    },
+    {
+      "key": "troubleshooting",
+      "name": "Troubleshooting",
+      "weight": 0.25,
+      "description": "Gathers evidence (request IDs, timestamps, payloads, logs) before concluding, and isolates the cause.",
+      "coaching": "Use the evidence checklist in each runbook and ask for request IDs and timestamps in the first reply."
+    },
+    {
+      "key": "communication",
+      "name": "Communication",
+      "weight": 0.20,
+      "description": "Clear, empathetic, sets expectations and next update time, no jargon without explanation.",
+      "coaching": "Review two strong replies together and practice the 'what we know / what we are doing / next update' format."
+    },
+    {
+      "key": "process",
+      "name": "Process and documentation",
+      "weight": 0.15,
+      "description": "Correct priority, category, internal notes, escalation template, and no sensitive data in the ticket.",
+      "coaching": "Walk through the escalation template and the data handling rules; spot check tickets for two weeks."
+    },
+    {
+      "key": "ownership",
+      "name": "Ownership",
+      "weight": 0.10,
+      "description": "Drives the ticket to resolution, follows up on escalations, and links or writes a KB article.",
+      "coaching": "Set a daily check on escalated tickets and agree on one KB article to write from recent work."
+    }
+  ],
+  "auto_fail_examples": [
+    "Customer secret, API key, or personal data pasted into a ticket or Slack thread",
+    "Incorrect guidance that caused customer impact",
+    "P1 not escalated to on-call engineering"
+  ]
+}

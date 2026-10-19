@@ -1,0 +1,518 @@
+{
+  "as_of": "2026-10-11T23:51:00Z",
+  "period": {
+    "start": "2026-08-31",
+    "end_week": "2026-10-05",
+    "weeks": 6
+  },
+  "attainment_goal_percent": 90,
+  "overall": {
+    "tickets": 287,
+    "first_response_sla_percent": 88.1,
+    "resolution_sla_percent": 91.7,
+    "median_first_response_minutes": 110.3,
+    "p90_first_response_minutes": 328.4,
+    "median_resolution_hours": 26.2,
+    "p90_resolution_hours": 76.9,
+    "escalation_rate_percent": 13.6,
+    "reopen_rate_percent": 8.3,
+    "csat_average": 3.95,
+    "csat_responses": 130,
+    "open_tickets": 10,
+    "sla_breaches": 57
+  },
+  "latest_week": {
+    "week": "2026-10-05",
+    "tickets": 54,
+    "first_response_sla_percent": 94.3,
+    "resolution_sla_percent": 95.5,
+    "median_first_response_minutes": 95.2,
+    "p90_first_response_minutes": 269.5,
+    "median_resolution_hours": 23.9,
+    "p90_resolution_hours": 52.3,
+    "escalation_rate_percent": 18.5,
+    "reopen_rate_percent": 6.8,
+    "csat_average": 3.85,
+    "csat_responses": 20,
+    "open_tickets": 10,
+    "sla_breaches": 5
+  },
+  "previous_week": {
+    "week": "2026-09-28",
+    "tickets": 53,
+    "first_response_sla_percent": 98.1,
+    "resolution_sla_percent": 94.3,
+    "median_first_response_minutes": 75.8,
+    "p90_first_response_minutes": 215.6,
+    "median_resolution_hours": 26.3,
+    "p90_resolution_hours": 78.1,
+    "escalation_rate_percent": 7.5,
+    "reopen_rate_percent": 11.3,
+    "csat_average": 4.12,
+    "csat_responses": 25,
+    "open_tickets": 0,
+    "sla_breaches": 4
+  },
+  "weekly": [
+    {
+      "week": "2026-08-31",
+      "tickets": 41,
+      "first_response_sla_percent": 85.4,
+      "resolution_sla_percent": 92.7,
+      "median_first_response_minutes": 117.9,
+      "p90_first_response_minutes": 382.1,
+      "median_resolution_hours": 30.5,
+      "p90_resolution_hours": 77.0,
+      "escalation_rate_percent": 22.0,
+      "reopen_rate_percent": 4.9,
+      "csat_average": 4.36,
+      "csat_responses": 14,
+      "open_tickets": 0,
+      "sla_breaches": 9
+    },
+    {
+      "week": "2026-09-07",
+      "tickets": 46,
+      "first_response_sla_percent": 89.1,
+      "resolution_sla_percent": 93.5,
+      "median_first_response_minutes": 152.7,
+      "p90_first_response_minutes": 442.9,
+      "median_resolution_hours": 28.9,
+      "p90_resolution_hours": 91.8,
+      "escalation_rate_percent": 15.2,
+      "reopen_rate_percent": 4.3,
+      "csat_average": 3.82,
+      "csat_responses": 22,
+      "open_tickets": 0,
+      "sla_breaches": 8
+    },
+    {
+      "week": "2026-09-14",
+      "tickets": 49,
+      "first_response_sla_percent": 87.8,
+      "resolution_sla_percent": 89.8,
+      "median_first_response_minutes": 98.3,
+      "p90_first_response_minutes": 344.8,
+      "median_resolution_hours": 24.4,
+      "p90_resolution_hours": 82.8,
+      "escalation_rate_percent": 12.2,
+      "reopen_rate_percent": 10.2,
+      "csat_average": 3.88,
+      "csat_responses": 25,
+      "open_tickets": 0,
+      "sla_breaches": 11
+    },
+    {
+      "week": "2026-09-21",
+      "tickets": 44,
+      "first_response_sla_percent": 70.5,
+      "resolution_sla_percent": 84.1,
+      "median_first_response_minutes": 121.0,
+      "p90_first_response_minutes": 229.5,
+      "median_resolution_hours": 36.0,
+      "p90_resolution_hours": 67.8,
+      "escalation_rate_percent": 6.8,
+      "reopen_rate_percent": 11.4,
+      "csat_average": 3.83,
+      "csat_responses": 24,
+      "open_tickets": 0,
+      "sla_breaches": 20
+    },
+    {
+      "week": "2026-09-28",
+      "tickets": 53,
+      "first_response_sla_percent": 98.1,
+      "resolution_sla_percent": 94.3,
+      "median_first_response_minutes": 75.8,
+      "p90_first_response_minutes": 215.6,
+      "median_resolution_hours": 26.3,
+      "p90_resolution_hours": 78.1,
+      "escalation_rate_percent": 7.5,
+      "reopen_rate_percent": 11.3,
+      "csat_average": 4.12,
+      "csat_responses": 25,
+      "open_tickets": 0,
+      "sla_breaches": 4
+    },
+    {
+      "week": "2026-10-05",
+      "tickets": 54,
+      "first_response_sla_percent": 94.3,
+      "resolution_sla_percent": 95.5,
+      "median_first_response_minutes": 95.2,
+      "p90_first_response_minutes": 269.5,
+      "median_resolution_hours": 23.9,
+      "p90_resolution_hours": 52.3,
+      "escalation_rate_percent": 18.5,
+      "reopen_rate_percent": 6.8,
+      "csat_average": 3.85,
+      "csat_responses": 20,
+      "open_tickets": 10,
+      "sla_breaches": 5
+    }
+  ],
+  "priorities": [
+    {
+      "priority": "P1",
+      "first_response_target_minutes": 15,
+      "resolution_target_hours": 4,
+      "tickets": 22,
+      "first_response_sla_percent": 72.7,
+      "resolution_sla_percent": 90.9,
+      "median_first_response_minutes": 10.7,
+      "p90_first_response_minutes": 19.4,
+      "median_resolution_hours": 2.1,
+      "p90_resolution_hours": 3.6,
+      "escalation_rate_percent": 22.7,
+      "reopen_rate_percent": 13.6,
+      "csat_average": 3.8,
+      "csat_responses": 10,
+      "open_tickets": 0,
+      "sla_breaches": 8
+    },
+    {
+      "priority": "P2",
+      "first_response_target_minutes": 60,
+      "resolution_target_hours": 24,
+      "tickets": 73,
+      "first_response_sla_percent": 80.8,
+      "resolution_sla_percent": 87.5,
+      "median_first_response_minutes": 37.1,
+      "p90_first_response_minutes": 76.6,
+      "median_resolution_hours": 13.6,
+      "p90_resolution_hours": 24.5,
+      "escalation_rate_percent": 16.4,
+      "reopen_rate_percent": 11.1,
+      "csat_average": 3.86,
+      "csat_responses": 28,
+      "open_tickets": 1,
+      "sla_breaches": 23
+    },
+    {
+      "priority": "P3",
+      "first_response_target_minutes": 240,
+      "resolution_target_hours": 72,
+      "tickets": 123,
+      "first_response_sla_percent": 91.8,
+      "resolution_sla_percent": 94.0,
+      "median_first_response_minutes": 136.5,
+      "p90_first_response_minutes": 235.9,
+      "median_resolution_hours": 39.2,
+      "p90_resolution_hours": 67.8,
+      "escalation_rate_percent": 8.9,
+      "reopen_rate_percent": 6.0,
+      "csat_average": 3.95,
+      "csat_responses": 59,
+      "open_tickets": 7,
+      "sla_breaches": 17
+    },
+    {
+      "priority": "P4",
+      "first_response_target_minutes": 480,
+      "resolution_target_hours": 120,
+      "tickets": 69,
+      "first_response_sla_percent": 94.2,
+      "resolution_sla_percent": 92.5,
+      "median_first_response_minutes": 282.6,
+      "p90_first_response_minutes": 457.1,
+      "median_resolution_hours": 68.7,
+      "p90_resolution_hours": 105.3,
+      "escalation_rate_percent": 15.9,
+      "reopen_rate_percent": 7.5,
+      "csat_average": 4.09,
+      "csat_responses": 33,
+      "open_tickets": 2,
+      "sla_breaches": 9
+    }
+  ],
+  "categories": [
+    {
+      "category": "webhook_delivery",
+      "latest_week_tickets": 20,
+      "prior_weekly_average": 7.6,
+      "escalation_targets": [
+        "Engineering"
+      ],
+      "tickets": 58,
+      "first_response_sla_percent": 87.9,
+      "resolution_sla_percent": 92.9,
+      "median_first_response_minutes": 71.3,
+      "p90_first_response_minutes": 347.7,
+      "median_resolution_hours": 20.0,
+      "p90_resolution_hours": 69.4,
+      "escalation_rate_percent": 8.6,
+      "reopen_rate_percent": 16.1,
+      "csat_average": 3.81,
+      "csat_responses": 27,
+      "open_tickets": 2,
+      "sla_breaches": 11
+    },
+    {
+      "category": "risk_score_questions",
+      "latest_week_tickets": 9,
+      "prior_weekly_average": 9.6,
+      "escalation_targets": [
+        "Engineering"
+      ],
+      "tickets": 57,
+      "first_response_sla_percent": 87.7,
+      "resolution_sla_percent": 88.9,
+      "median_first_response_minutes": 123.8,
+      "p90_first_response_minutes": 282.8,
+      "median_resolution_hours": 28.4,
+      "p90_resolution_hours": 71.7,
+      "escalation_rate_percent": 28.1,
+      "reopen_rate_percent": 3.7,
+      "csat_average": 3.75,
+      "csat_responses": 24,
+      "open_tickets": 3,
+      "sla_breaches": 13
+    },
+    {
+      "category": "api_authentication",
+      "latest_week_tickets": 9,
+      "prior_weekly_average": 8.8,
+      "escalation_targets": [
+        "Engineering"
+      ],
+      "tickets": 53,
+      "first_response_sla_percent": 90.6,
+      "resolution_sla_percent": 98.1,
+      "median_first_response_minutes": 118.4,
+      "p90_first_response_minutes": 356.2,
+      "median_resolution_hours": 37.2,
+      "p90_resolution_hours": 69.5,
+      "escalation_rate_percent": 9.4,
+      "reopen_rate_percent": 1.9,
+      "csat_average": 4.21,
+      "csat_responses": 24,
+      "open_tickets": 1,
+      "sla_breaches": 6
+    },
+    {
+      "category": "sdk_integration",
+      "latest_week_tickets": 6,
+      "prior_weekly_average": 7.6,
+      "escalation_targets": [
+        "Engineering"
+      ],
+      "tickets": 44,
+      "first_response_sla_percent": 86.0,
+      "resolution_sla_percent": 95.2,
+      "median_first_response_minutes": 100.8,
+      "p90_first_response_minutes": 279.6,
+      "median_resolution_hours": 22.1,
+      "p90_resolution_hours": 76.2,
+      "escalation_rate_percent": 18.2,
+      "reopen_rate_percent": 16.7,
+      "csat_average": 4,
+      "csat_responses": 19,
+      "open_tickets": 2,
+      "sla_breaches": 8
+    },
+    {
+      "category": "dashboard_access",
+      "latest_week_tickets": 6,
+      "prior_weekly_average": 7.0,
+      "escalation_targets": [
+        "Product"
+      ],
+      "tickets": 41,
+      "first_response_sla_percent": 85.4,
+      "resolution_sla_percent": 90.2,
+      "median_first_response_minutes": 120.8,
+      "p90_first_response_minutes": 315.5,
+      "median_resolution_hours": 23.9,
+      "p90_resolution_hours": 89.4,
+      "escalation_rate_percent": 4.9,
+      "reopen_rate_percent": 2.4,
+      "csat_average": 4.1,
+      "csat_responses": 21,
+      "open_tickets": 0,
+      "sla_breaches": 10
+    },
+    {
+      "category": "data_export_reporting",
+      "latest_week_tickets": 4,
+      "prior_weekly_average": 6.0,
+      "escalation_targets": [
+        "Data Platform"
+      ],
+      "tickets": 34,
+      "first_response_sla_percent": 91.2,
+      "resolution_sla_percent": 81.2,
+      "median_first_response_minutes": 123.0,
+      "p90_first_response_minutes": 323.4,
+      "median_resolution_hours": 43.7,
+      "p90_resolution_hours": 75.1,
+      "escalation_rate_percent": 8.8,
+      "reopen_rate_percent": 9.4,
+      "csat_average": 3.87,
+      "csat_responses": 15,
+      "open_tickets": 2,
+      "sla_breaches": 9
+    }
+  ],
+  "systemic_issues": [
+    {
+      "category": "webhook_delivery",
+      "signal": "volume spike",
+      "severity": "critical",
+      "evidence": "20 tickets last week vs 7.6 weekly average before it (2.6x).",
+      "action": "Open a problem record, check recent releases and status page history, and ask Engineering for a fix owner and ETA."
+    },
+    {
+      "category": "risk_score_questions",
+      "signal": "high escalation rate",
+      "severity": "serious",
+      "evidence": "28.1% of tickets escalated (rule: 25%).",
+      "action": "Find the top escalation reasons, then close the gap with a runbook, a tool or log access for support, or training."
+    },
+    {
+      "category": "sdk_integration",
+      "signal": "high reopen rate",
+      "severity": "warning",
+      "evidence": "16.7% of resolved tickets reopened (rule: 12%).",
+      "action": "QA review reopened tickets; check whether fixes are confirmed with the customer before closing."
+    },
+    {
+      "category": "webhook_delivery",
+      "signal": "high reopen rate",
+      "severity": "warning",
+      "evidence": "16.1% of resolved tickets reopened (rule: 12%).",
+      "action": "QA review reopened tickets; check whether fixes are confirmed with the customer before closing."
+    }
+  ],
+  "engineers": [
+    {
+      "engineer": "Avery",
+      "tickets": 62,
+      "first_response_sla_percent": 98.4,
+      "resolution_sla_percent": 100.0,
+      "escalation_rate_percent": 14.5,
+      "reopen_rate_percent": 6.8,
+      "csat_average": 3.84,
+      "qa_average": 87.1,
+      "qa_reviews": 6,
+      "weakest_qa_dimension": "Technical accuracy",
+      "coaching_focus": [
+        "Keep doing what works; consider mentoring or writing KB articles."
+      ]
+    },
+    {
+      "engineer": "Jordan",
+      "tickets": 56,
+      "first_response_sla_percent": 94.6,
+      "resolution_sla_percent": 87.5,
+      "escalation_rate_percent": 7.1,
+      "reopen_rate_percent": 12.5,
+      "csat_average": 4.24,
+      "qa_average": 79.4,
+      "qa_reviews": 6,
+      "weakest_qa_dimension": "Communication",
+      "coaching_focus": [
+        "Communication: Review two strong replies together and practice the 'what we know / what we are doing / next update' format."
+      ]
+    },
+    {
+      "engineer": "Mateo",
+      "tickets": 62,
+      "first_response_sla_percent": 62.9,
+      "resolution_sla_percent": 78.3,
+      "escalation_rate_percent": 16.1,
+      "reopen_rate_percent": 8.3,
+      "csat_average": 3.82,
+      "qa_average": 82.5,
+      "qa_reviews": 6,
+      "weakest_qa_dimension": "Troubleshooting",
+      "coaching_focus": [
+        "Troubleshooting: Use the evidence checklist in each runbook and ask for request IDs and timestamps in the first reply.",
+        "First response: check queue views and notification settings; agree on a triage cadence."
+      ]
+    },
+    {
+      "engineer": "Priya",
+      "tickets": 58,
+      "first_response_sla_percent": 91.4,
+      "resolution_sla_percent": 98.2,
+      "escalation_rate_percent": 12.1,
+      "reopen_rate_percent": 7.1,
+      "csat_average": 4.18,
+      "qa_average": 94.4,
+      "qa_reviews": 6,
+      "weakest_qa_dimension": "Ownership",
+      "coaching_focus": [
+        "Keep doing what works; consider mentoring or writing KB articles."
+      ]
+    },
+    {
+      "engineer": "Sam",
+      "tickets": 49,
+      "first_response_sla_percent": 95.9,
+      "resolution_sla_percent": 95.7,
+      "escalation_rate_percent": 18.4,
+      "reopen_rate_percent": 6.5,
+      "csat_average": 3.82,
+      "qa_average": 70.8,
+      "qa_reviews": 6,
+      "weakest_qa_dimension": "Process and documentation",
+      "coaching_focus": [
+        "Process and documentation: Walk through the escalation template and the data handling rules; spot check tickets for two weeks.",
+        "Data handling: review the sensitive data rules together before the next shift."
+      ]
+    }
+  ],
+  "qa": {
+    "reviews": 30,
+    "average_score": 82.8,
+    "pass_rate_percent": 76.7,
+    "auto_fails": [
+      {
+        "ticket_id": "SUP-4194",
+        "engineer": "Sam",
+        "score": 0.0,
+        "passed": false,
+        "auto_fail_reason": "customer API key pasted in ticket reply",
+        "dimension_scores": {
+          "technical_accuracy": 3,
+          "troubleshooting": 4,
+          "communication": 3,
+          "process": 2,
+          "ownership": 3
+        }
+      }
+    ],
+    "dimensions": [
+      {
+        "key": "technical_accuracy",
+        "name": "Technical accuracy",
+        "weight": 0.3,
+        "average": 3.47
+      },
+      {
+        "key": "troubleshooting",
+        "name": "Troubleshooting",
+        "weight": 0.25,
+        "average": 3.4
+      },
+      {
+        "key": "communication",
+        "name": "Communication",
+        "weight": 0.2,
+        "average": 3.27
+      },
+      {
+        "key": "process",
+        "name": "Process and documentation",
+        "weight": 0.15,
+        "average": 3.47
+      },
+      {
+        "key": "ownership",
+        "name": "Ownership",
+        "weight": 0.1,
+        "average": 3.53
+      }
+    ]
+  }
+}

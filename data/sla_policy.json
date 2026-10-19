@@ -1,0 +1,16 @@
+{
+  "description": "Example enterprise support SLA targets. Targets are measured in calendar time to keep the lab simple; a real policy usually also defines business hours per customer tier.",
+  "attainment_goal_percent": 90,
+  "priorities": {
+    "P1": {"label": "Critical - production down or fraud decisions failing", "first_response_minutes": 15, "resolution_hours": 4},
+    "P2": {"label": "High - major feature degraded, workaround is painful", "first_response_minutes": 60, "resolution_hours": 24},
+    "P3": {"label": "Normal - question or partial issue with a workaround", "first_response_minutes": 240, "resolution_hours": 72},
+    "P4": {"label": "Low - how-to, feature request, or cosmetic", "first_response_minutes": 480, "resolution_hours": 120}
+  },
+  "systemic_issue_rules": {
+    "min_tickets": 5,
+    "volume_spike_ratio": 1.5,
+    "escalation_rate_percent": 25,
+    "reopen_rate_percent": 12
+  }
+}
