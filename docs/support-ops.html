@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="data:,">
   <title>Support Ops Metrics</title>
   <style>
     :root {
@@ -227,7 +228,10 @@
   </main>
 
   <script>
-    const SOURCES = ["../output/support-ops-metrics.json", "../examples/support-ops-metrics.json", "support-ops-metrics.json"];
+    // Local checkout: prefer freshly generated output, then the committed example. Published site: the copy next to this page.
+    const SOURCES = location.pathname.includes("/dashboard/")
+      ? ["../output/support-ops-metrics.json", "../examples/support-ops-metrics.json"]
+      : ["support-ops-metrics.json"];
     const SVG_NS = "http://www.w3.org/2000/svg";
 
     function el(tag, attrs = {}, text) {
