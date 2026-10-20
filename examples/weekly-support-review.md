@@ -28,6 +28,14 @@ Generated from ticket and QA data. Numbers are calendar time; open tickets insid
 | P3 | 123 | 91.8% | 94% | 136.5 min |
 | P4 | 69 | 94.2% | 92.5% | 282.6 min |
 
+## SLA by customer tier (whole period)
+
+| Tier | Tickets | First response SLA | Resolution SLA | P1/P2 first response SLA | Escalation rate | CSAT |
+| --- | --- | --- | --- | --- | --- | --- |
+| enterprise | 103 | 89.3% | 93.9% | 80% (40 tickets) | 16.5% | 3.73 |
+| growth | 110 | 88.1% | 87.7% | 71% (31 tickets) | 12.7% | 4.06 |
+| standard | 74 | 86.5% | 94.5% | 87.5% (24 tickets) | 10.8% | 4.12 |
+
 ## Trend to watch
 
 - First response SLA dipped to 70.5% in the week of 2026-09-21. Check on-call coverage and queue routing for that week before it repeats.

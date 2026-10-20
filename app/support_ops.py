@@ -319,6 +319,28 @@ def priority_breakdown(tickets: list[dict[str, Any]], policy: dict[str, Any], as
     return rows
 
 
+TIER_ORDER = ["enterprise", "growth", "standard"]
+URGENT_PRIORITIES = {"P1", "P2"}
+
+
+def tier_breakdown(tickets: list[dict[str, Any]], policy: dict[str, Any], as_of: datetime) -> list[dict[str, Any]]:
+    """SLA by customer tier. Urgent first response is reported separately because averages hide it."""
+    groups = group_by(tickets, lambda ticket: ticket["customer_tier"])
+    rows = []
+    for tier in sorted(groups, key=lambda name: TIER_ORDER.index(name) if name in TIER_ORDER else len(TIER_ORDER)):
+        items = groups[tier]
+        urgent = [ticket for ticket in items if ticket["priority"] in URGENT_PRIORITIES]
+        rows.append(
+            {
+                "tier": tier,
+                "urgent_tickets": len(urgent),
+                "urgent_first_response_sla_percent": core_metrics(urgent, policy, as_of)["first_response_sla_percent"] if urgent else None,
+                **core_metrics(items, policy, as_of),
+            }
+        )
+    return rows
+
+
 def build_report(
     tickets: list[dict[str, Any]],
     reviews: list[dict[str, str]],
@@ -339,6 +361,7 @@ def build_report(
         "previous_week": weeks[-2] if len(weeks) > 1 else None,
         "weekly": weeks,
         "priorities": priority_breakdown(tickets, policy, as_of),
+        "tiers": tier_breakdown(tickets, policy, as_of),
         "categories": categories,
         "systemic_issues": detect_systemic_issues(categories, policy["systemic_issue_rules"]),
         "engineers": engineer_scorecards(tickets, qa, rubric, policy, as_of),
@@ -392,6 +415,21 @@ def build_weekly_review(report: dict[str, Any]) -> str:
     for row in report["priorities"]:
         lines.append(
             f"| {row['priority']} | {row['tickets']} | {fmt(row['first_response_sla_percent'], '%')} | {fmt(row['resolution_sla_percent'], '%')} | {fmt(row['median_first_response_minutes'], ' min')} |"
+        )
+
+    lines.extend(
+        [
+            "",
+            "## SLA by customer tier (whole period)",
+            "",
+            "| Tier | Tickets | First response SLA | Resolution SLA | P1/P2 first response SLA | Escalation rate | CSAT |",
+            "| --- | --- | --- | --- | --- | --- | --- |",
+        ]
+    )
+    for row in report["tiers"]:
+        lines.append(
+            f"| {row['tier']} | {row['tickets']} | {fmt(row['first_response_sla_percent'], '%')} | {fmt(row['resolution_sla_percent'], '%')} | "
+            f"{fmt(row['urgent_first_response_sla_percent'], '%')} ({row['urgent_tickets']} tickets) | {fmt(row['escalation_rate_percent'], '%')} | {fmt(row['csat_average'])} |"
         )
 
     weeks = report["weekly"]

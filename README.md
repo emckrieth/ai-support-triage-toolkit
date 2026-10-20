@@ -100,10 +100,21 @@ From six weeks of fictional tickets (`data/support_tickets.csv`) and QA reviews 
 - **Volume and escalation trends** by week and category.
 - **Systemic issues**: volume spikes, high escalation rates, and high reopen rates that should go to Engineering or Product, each with a next step.
 - **Quality review scores** from a weighted rubric (`data/qa_rubric.json`) with auto-fail rules for things like pasting a customer API key.
+- **SLA by customer tier**, including first response on urgent (P1/P2) tickets, the number enterprise customers judge support on.
 - **Coaching focus per engineer** for 1:1s, built from QA weak spots and SLA results.
 - **A weekly review write-up** in Markdown, ready to share with Engineering, Product, and Customer Success. See `examples/weekly-support-review.md`.
 
-The sample data has a story to find: a webhook delivery spike after a fictional release, risk score questions that escalate too often, and an on-call gap week where P1 and P2 response times slipped.
+The sample data has a story to find: a webhook delivery spike after a fictional release, risk score questions that escalate too often, an on-call gap week where P1 and P2 response times slipped, and enterprise customers waiting longest on urgent tickets.
+
+### Reading the dashboard as a support lead
+
+What I would tell the team, Engineering, and Customer Success from the week of 2026-10-05:
+
+1. **Webhook delivery is a product problem, not a support problem.** Tickets ran at 2.6x the usual weekly volume and reopen 16% of the time. I'd open a problem record and ask Engineering for a fix owner and date, and have one engineer write the KB article so the next ticket is a five-minute answer.
+2. **Enterprise customers are waiting too long on urgent tickets.** Only 80% of enterprise P1 and P2 tickets got a first response on time, against a 90% goal. Enterprise also has the highest escalation rate (16.5%) and the lowest CSAT (3.73). I'd review on-call coverage and routing for urgent enterprise tickets with Customer Success before it becomes a renewal conversation.
+3. **Escalations jumped 11 points to 18.5%, led by risk score questions** (28.1% escalated). Support needs either a runbook for explaining scores or read access to decision logs. I'd ask Engineering which one they can deliver first.
+
+On the team side, the lowest QA dimension is communication, which becomes this month's training topic. The pasted API key is handled privately in a 1:1, together with a request for secret scanning on ticket replies.
 
 Supporting docs:
 

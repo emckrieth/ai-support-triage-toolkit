@@ -194,6 +194,11 @@
           <div class="small">Whole period. P1 and P2 misses are the ones enterprise customers remember.</div>
         </div>
         <div class="table-wrap" id="priority-table"></div>
+        <div class="panel-head" style="margin-top: 22px">
+          <h2>SLA by customer tier</h2>
+          <div class="small">Whole period. Urgent is first response on P1 and P2 tickets, the number enterprise customers judge you on.</div>
+        </div>
+        <div class="table-wrap" id="tier-table"></div>
       </div>
     </section>
 
@@ -539,6 +544,28 @@
       ));
     }
 
+    function renderTiers(report) {
+      const goal = report.attainment_goal_percent;
+      const status = (value) => badge(value === null ? "warning" : value >= goal ? "good" : value >= goal - 10 ? "serious" : "critical");
+      const urgentCell = (t) => {
+        const cell = el("span", { class: "issue-top" });
+        cell.append(el("span", {}, `${fmt(t.urgent_first_response_sla_percent, "%")} of ${t.urgent_tickets}`), status(t.urgent_first_response_sla_percent));
+        return cell;
+      };
+      document.getElementById("tier-table").replaceChildren(buildTable(
+        ["Tier", "Tickets", "First response", "Urgent first response", "Escalated", "CSAT"],
+        report.tiers.map((t) => [
+          label(t.tier),
+          t.tickets,
+          fmt(t.first_response_sla_percent, "%"),
+          urgentCell(t),
+          fmt(t.escalation_rate_percent, "%"),
+          fmt(t.csat_average),
+        ]),
+        [false, true, true, false, true, true],
+      ));
+    }
+
     function renderCategories(report) {
       const maxTickets = Math.max(...report.categories.map((c) => c.tickets));
       document.getElementById("category-table").replaceChildren(buildTable(
@@ -616,6 +643,7 @@
       renderVolumeChart(report);
       renderIssues(report);
       renderPriorities(report);
+      renderTiers(report);
       renderCategories(report);
       renderQa(report);
       renderEngineers(report);

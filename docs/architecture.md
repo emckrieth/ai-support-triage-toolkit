@@ -53,7 +53,7 @@ The triage engine. It loads incidents and runbooks, masks sensitive values, scor
 
 ### app/support_ops.py
 
-The support ops engine. It loads tickets and QA reviews, decides SLA outcomes per ticket, builds weekly, priority, category, and engineer views, flags systemic issues, scores QA reviews against the rubric, and writes `output/support-ops-metrics.json` and `output/weekly-support-review.md`. It reuses the JSON helpers from `app/triage.py`. Metric definitions are in `docs/support-ops-metrics.md`.
+The support ops engine. It loads tickets and QA reviews, decides SLA outcomes per ticket, builds weekly, priority, customer tier, category, and engineer views, flags systemic issues, scores QA reviews against the rubric, and writes `output/support-ops-metrics.json` and `output/weekly-support-review.md`. It reuses the JSON helpers from `app/triage.py`. Metric definitions are in `docs/support-ops-metrics.md`.
 
 ### data/sample_incidents.json
 
