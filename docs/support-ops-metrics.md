@@ -38,6 +38,7 @@ dashboard/support-ops.html
 | Reopen rate | Resolved tickets that reopened / resolved tickets | A proxy for fix quality and closing without confirmation |
 | CSAT | Average of 1-5 survey responses | Lagging indicator; read it next to the response count |
 | Open tickets | Tickets with no resolution time at report time | Backlog for the next shift and weekend coverage |
+| Urgent first response SLA | First response SLA on P1 and P2 tickets only, reported per customer tier | Overall attainment hides the tickets customers remember; see below |
 
 ### Pending is not a miss
 
@@ -63,6 +64,12 @@ A support lead's job is to make the next ticket unnecessary. The report flags ca
 
 Categories with fewer than `min_tickets` tickets are skipped so one bad ticket does not look like a trend.
 
+## SLA by Customer Tier
+
+Every ticket carries a `customer_tier` (enterprise, growth, or standard). The report breaks SLA attainment, escalation rate, and CSAT down by tier, and adds **urgent first response SLA**: first response attainment on P1 and P2 tickets only.
+
+Overall attainment can look healthy while the tickets that matter most are late. In the sample data, enterprise first response SLA is 89.3%, close to the 90% goal, but only 80% of enterprise P1 and P2 tickets got a first response on time. Enterprise also has the highest escalation rate and the lowest CSAT of the three tiers. That is the number to bring to Customer Success and to on-call planning.
+
 ## Engineer Coaching View
 
 Each engineer gets ticket count, SLA attainment, escalation and reopen rates, CSAT, QA average, and a short coaching focus built from:
@@ -80,6 +87,7 @@ The view is meant for 1:1s and development plans. Ticket counts depend on queue 
 - webhook delivery tickets jump in the last two weeks (a fictional release regression)
 - risk score questions escalate to Engineering more than other categories
 - the week of 2026-09-21 had thin on-call coverage, so P1 and P2 first responses slipped
+- enterprise customers get the slowest urgent first responses, the most escalations, and the lowest CSAT
 - QA reviews point to a different coaching need for each engineer, plus one auto-fail for a pasted API key
 
 Regenerate with `python scripts/generate_support_data.py`.

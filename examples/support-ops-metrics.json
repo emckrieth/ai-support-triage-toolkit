@@ -225,6 +225,62 @@
       "sla_breaches": 9
     }
   ],
+  "tiers": [
+    {
+      "tier": "enterprise",
+      "urgent_tickets": 40,
+      "urgent_first_response_sla_percent": 80.0,
+      "tickets": 103,
+      "first_response_sla_percent": 89.3,
+      "resolution_sla_percent": 93.9,
+      "median_first_response_minutes": 114.1,
+      "p90_first_response_minutes": 362.8,
+      "median_resolution_hours": 23.7,
+      "p90_resolution_hours": 71.2,
+      "escalation_rate_percent": 16.5,
+      "reopen_rate_percent": 10.2,
+      "csat_average": 3.73,
+      "csat_responses": 49,
+      "open_tickets": 5,
+      "sla_breaches": 17
+    },
+    {
+      "tier": "growth",
+      "urgent_tickets": 31,
+      "urgent_first_response_sla_percent": 71.0,
+      "tickets": 110,
+      "first_response_sla_percent": 88.1,
+      "resolution_sla_percent": 87.7,
+      "median_first_response_minutes": 102.2,
+      "p90_first_response_minutes": 303.9,
+      "median_resolution_hours": 37.5,
+      "p90_resolution_hours": 85.4,
+      "escalation_rate_percent": 12.7,
+      "reopen_rate_percent": 7.5,
+      "csat_average": 4.06,
+      "csat_responses": 48,
+      "open_tickets": 4,
+      "sla_breaches": 26
+    },
+    {
+      "tier": "standard",
+      "urgent_tickets": 24,
+      "urgent_first_response_sla_percent": 87.5,
+      "tickets": 74,
+      "first_response_sla_percent": 86.5,
+      "resolution_sla_percent": 94.5,
+      "median_first_response_minutes": 119.4,
+      "p90_first_response_minutes": 281.7,
+      "median_resolution_hours": 24.7,
+      "p90_resolution_hours": 66.9,
+      "escalation_rate_percent": 10.8,
+      "reopen_rate_percent": 6.8,
+      "csat_average": 4.12,
+      "csat_responses": 33,
+      "open_tickets": 1,
+      "sla_breaches": 14
+    }
+  ],
   "categories": [
     {
       "category": "webhook_delivery",

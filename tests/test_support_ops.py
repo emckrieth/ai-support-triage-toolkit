@@ -12,6 +12,7 @@ from app.support_ops import (
     run,
     score_review,
     sla_outcomes,
+    tier_breakdown,
 )
 from app.triage import load_json
 
@@ -31,6 +32,7 @@ def ticket(priority="P2", response_minutes=30, resolve_hours=10, **overrides):
         "resolved_at": created + timedelta(hours=resolve_hours) if resolve_hours is not None else None,
         "priority": priority,
         "category": overrides.pop("category", "webhook_delivery"),
+        "customer_tier": overrides.pop("customer_tier", "growth"),
         "assignee": overrides.pop("assignee", "Avery"),
         "escalated_to": overrides.pop("escalated_to", ""),
         "reopened": overrides.pop("reopened", False),
@@ -81,6 +83,28 @@ class SystemicIssueTests(unittest.TestCase):
         self.assertIn(("risk_score_questions", "high escalation rate"), found)
         self.assertFalse(any(issue["category"] == "dashboard_access" for issue in issues))
         self.assertEqual(issues[0]["severity"], "critical")
+
+
+class TierTests(unittest.TestCase):
+    def test_tiers_are_ordered_and_urgent_sla_counts_only_p1_p2(self):
+        as_of = START + timedelta(days=3)
+        tickets = [
+            ticket("P1", 30, ticket_id="SUP-1", customer_tier="enterprise"),  # 30 min > 15 min target: breached
+            ticket("P3", 30, ticket_id="SUP-2", customer_tier="enterprise"),
+            ticket("P2", 30, ticket_id="SUP-3", customer_tier="standard"),
+            ticket("P4", 30, ticket_id="SUP-4", customer_tier="growth"),
+        ]
+
+        rows = tier_breakdown(tickets, POLICY, as_of)
+
+        self.assertEqual([row["tier"] for row in rows], ["enterprise", "growth", "standard"])
+        enterprise = rows[0]
+        self.assertEqual(enterprise["tickets"], 2)
+        self.assertEqual(enterprise["urgent_tickets"], 1)
+        self.assertEqual(enterprise["urgent_first_response_sla_percent"], 0)
+        self.assertEqual(enterprise["first_response_sla_percent"], 50)
+        self.assertIsNone(rows[1]["urgent_first_response_sla_percent"])
+        self.assertEqual(rows[2]["urgent_first_response_sla_percent"], 100)
 
 
 class QaTests(unittest.TestCase):
@@ -144,6 +168,9 @@ class ReportTests(unittest.TestCase):
         self.assertIn(("risk_score_questions", "high escalation rate"), signals)
         self.assertEqual(len(report["qa"]["auto_fails"]), 1)
         self.assertIn("Coaching focus", review)
+        self.assertIn("SLA by customer tier", review)
+        self.assertEqual([row["tier"] for row in report["tiers"]], ["enterprise", "growth", "standard"])
+        self.assertEqual(sum(row["tickets"] for row in report["tiers"]), report["overall"]["tickets"])
 
 
 if __name__ == "__main__":
