@@ -13,6 +13,12 @@ The goal is to show practical enterprise support skills:
 - Clear escalation notes for support, infrastructure, endpoint, and IAM teams
 - Support team metrics, SLA tracking, and quality review that drive process improvements
 
+## Development approach
+
+This toolkit was developed with assistance from Claude and Codex. Claude-authored commits introduced substantial parts of the support operations metrics module, dashboard, sample data, documentation, and tests. Commit attribution is retained.
+
+The incident triage engine uses explicit rules and weighted scoring. Its match score is not a calibrated probability or measured accuracy. The fictional ticket data and generated reports demonstrate workflow behavior, not production results. Future case studies will distinguish owner decisions and review findings from AI implementation assistance and automated checks.
+
 ## What This Solves
 
 Support teams often receive messy ticket notes, screenshots, log snippets, endpoint health data, and identity exports. This project simulates a safer workflow:
