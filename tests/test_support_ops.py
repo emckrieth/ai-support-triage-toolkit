@@ -173,5 +173,43 @@ class ReportTests(unittest.TestCase):
         self.assertEqual(sum(row["tickets"] for row in report["tiers"]), report["overall"]["tickets"])
 
 
+class CoachingSlaTests(unittest.TestCase):
+    def make_card(self, response_minutes, report_minutes):
+        report = build_report(
+            [ticket(response_minutes=response_minutes, resolve_hours=None)],
+            [],
+            POLICY,
+            RUBRIC,
+            as_of=START + timedelta(minutes=report_minutes),
+        )
+        return report["engineers"][0]
+
+    def test_pending_sla_does_not_trigger_response_coaching(self):
+        card = self.make_card(None, 30)
+
+        self.assertIsNone(card["first_response_sla_percent"])
+        self.assertFalse(any(
+            item.startswith("First response:")
+            for item in card["coaching_focus"]
+        ))
+
+    def test_zero_attainment_still_triggers_response_coaching(self):
+        card = self.make_card(90, 120)
+
+        self.assertEqual(card["first_response_sla_percent"], 0.0)
+        self.assertTrue(any(
+            item.startswith("First response:")
+            for item in card["coaching_focus"]
+        ))
+
+    def test_met_sla_does_not_trigger_response_coaching(self):
+        card = self.make_card(30, 120)
+
+        self.assertEqual(card["first_response_sla_percent"], 100.0)
+        self.assertFalse(any(
+            item.startswith("First response:")
+            for item in card["coaching_focus"]
+        ))
+
 if __name__ == "__main__":
     unittest.main()
