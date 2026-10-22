@@ -28,4 +28,4 @@ Reproduce the complete suite from the repository root:
 python -m unittest discover -s tests -v
 ```
 
-This is evidence of a guided correction and hands-on verification, not independent authorship of the original module or tests. Existing Claude attribution is retained. The separate weekly-trend reporting expression that uses `or 100` remains outside this change.
+This is evidence of a guided correction and hands-on verification, not independent authorship of the original module or tests. Existing Claude attribution is retained. A subsequent assistant-executed correction completed the weekly-trend issue. The old `or 100` expression treated a genuine 0% week as 100% and could select a 50% week instead. The corrected comparison excludes None, retains zero and safely handles an all-pending report. Three regression tests cover zero versus fifty/pending, all-pending weeks and weeks meeting the goal. Before the correction, the zero-attainment case failed; afterward all 18 repository tests passed. The owner delegated this second correction to Codex; it is not recorded as a personal edit or run.
