@@ -434,8 +434,16 @@ def build_weekly_review(report: dict[str, Any]) -> str:
         )
 
     weeks = report["weekly"]
-    worst = min(weeks, key=lambda week: week["first_response_sla_percent"] or 100)
-    if (worst["first_response_sla_percent"] or 100) < goal:
+    eligible_weeks = [
+        week for week in weeks
+        if week["first_response_sla_percent"] is not None
+    ]
+    worst = min(
+        eligible_weeks,
+        key=lambda week: week["first_response_sla_percent"],
+        default=None,
+    )
+    if worst is not None and worst["first_response_sla_percent"] < goal:
         lines.extend(
             [
                 "",
