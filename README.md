@@ -19,6 +19,8 @@ This toolkit was developed with assistance from Claude and Codex. Claude-authore
 
 The incident triage engine uses explicit rules and weighted scoring. Its match score is not a calibrated probability or measured accuracy. The fictional ticket data and generated reports demonstrate workflow behavior, not production results. Future case studies will distinguish owner decisions and review findings from AI implementation assistance and automated checks.
 
+On October 22, 2026, the owner applied a guided fix for missing SLA outcomes being treated as zero attainment, added AI-supplied regression tests, and personally ran the support-operations tests. See the [SLA coaching fix and verification](docs/sla-coaching-fix.md) for the behavior, evidence, and division of work.
+
 ## What This Solves
 
 Support teams often receive messy ticket notes, screenshots, log snippets, endpoint health data, and identity exports. This project simulates a safer workflow:

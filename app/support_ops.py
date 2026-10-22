@@ -284,7 +284,8 @@ def engineer_scorecards(
         if any(review["auto_fail_reason"] for review in reviews):
             focus.append("Data handling: review the sensitive data rules together before the next shift.")
         goal = policy["attainment_goal_percent"]
-        if (metrics["first_response_sla_percent"] or 0) < goal:
+        response_sla = metrics["first_response_sla_percent"]
+        if response_sla is not None and response_sla < goal:
             focus.append("First response: check queue views and notification settings; agree on a triage cadence.")
         cards.append(
             {
