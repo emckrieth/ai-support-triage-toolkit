@@ -1,5 +1,22 @@
 # SLA coaching: distinguish pending outcomes from breaches
 
+## Contribution at a glance
+
+| My work | AI assistance | Verification |
+| --- | --- | --- |
+| Ran the attainment exercise and observed None versus 0% | Codex supplied the exercise and explanation | Owner-provided terminal output |
+| Applied the explicit None check and corrected indentation | Codex supplied the fix and debugging guidance | Existing support-operations tests passed |
+| Added supplied pending/breached/met tests and ran them | Codex supplied regression tests and checked the original logic in memory | 12 support-operations tests passed; then 15 full-suite tests passed |
+| Delegated the later weekly-trend correction | Codex implemented and tested that separate fix | 18 full-suite tests passed |
+
+```mermaid
+flowchart LR
+    A[SLA result] --> B{Eligible outcomes?}
+    B -->|No: None| C[Skip attainment warning]
+    B -->|Yes: includes zero| D[Compare with goal]
+    D --> E[Warn only for actual low attainment]
+```
+
 ## Problem and correction
 
 The coaching report used `(first_response_sla_percent or 0) < goal`. When all tickets were still inside their first-response deadlines, attainment was None (no eligible outcomes), but the report treated it as 0% and issued a low-attainment coaching warning.
